@@ -11,12 +11,7 @@ const spotifyApi = new SpotifyWebApi({
 
 spotifyApi.authorizationCodeGrant(code).then(
   function(data) {
-    if (err) {
-      console.log('Error:' + err);
-    }
-    else {
-      console.log('Authentication Success! Access Token is ' + data.body['access_token'])
-    }
+    console.log('Authentication Success! Access Token is ' + data.body['access_token'])
     //Setting the refresh and access tokens.
     spotifyApi.setAccessToken(data.body['access_token']);
     spotifyApi.setRefreshToken(data.body['refresh_token']);

@@ -6,3 +6,8 @@ code.json
 
 #My vscode workspace
 app.code-workspace
+
+#Output files
+songName.txt
+artistName.txt
+nowplaying.json

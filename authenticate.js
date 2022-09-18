@@ -17,8 +17,17 @@ spotifyApi.authorizationCodeGrant(code).then(
     spotifyApi.setRefreshToken(data.body['refresh_token']);
   },
   function(err) {
-    console.log('Error has Occurred! ' + err);
+    console.log('Uh Oh! Unexpected Error Occurred. ' + err);
   }
 );
 
-
+function refreshAccessToken() {
+  spotifyApi.refreshAccessToken().then (
+    function(data) {
+      console.log('Successfully Refreshed Access Token!');
+    }
+  ),
+    function(err) {
+      console.log('Uh Oh! Unexpected Error Occured. ' + err);
+    }
+};

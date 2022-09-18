@@ -15,5 +15,10 @@ spotifyApi.authorizationCodeGrant(code).then(
     //Setting the refresh and access tokens.
     spotifyApi.setAccessToken(data.body['access_token']);
     spotifyApi.setRefreshToken(data.body['refresh_token']);
+  },
+  function(err) {
+    console.log('Error has Occurred! ' + err);
   }
 );
+
+

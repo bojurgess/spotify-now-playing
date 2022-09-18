@@ -22,7 +22,10 @@ function generateURL() {
   http 
     .createServer(function(req, res) {
       let queryObject = url.parse(req.url, true).query;
-      fs.writeFile('code.json', JSON.stringify(queryObject.code), function(err) {
+      fs.writeFile('code.json', JSON.stringify(`${queryObject.code}`), function(err) {
+        if(err) {
+          return console.log(err)
+        }
       })
         
       res.writeHead(200, { 'Content-Type': 'text/html' });
@@ -68,10 +71,30 @@ function getNowPlaying() {
         console.log('I am currently listening to: ' + data.body.item.name, 'by ' + data.body.item.artists[0].name);
         nowPlaying.songName = data.body.item.name;
         nowPlaying.artistName = data.body.item.artists[0].name;
+        fs.writeFile('artistName.txt', `${nowPlaying.artistName}`, function(err) {
+          if(err) {
+            return console.log(err)
+          }
+        })
+        fs.writeFile('songName.txt', `${nowPlaying.songName}`, function(err) {
+          if(err) {
+            return console.log(err)
+          }
+        })
       }
       else {
         console.log('I am not currently listening to anything.');
         nowPlaying.songName = 'I am not currently listening to anything.';
+        fs.writeFile('songName.txt', 'I am not currently listening to anything.', function(err) {
+          if(err) {
+            return console.log(err)
+          }
+        })
+        fs.writeFile('artistName.txt', '  ', function(err) {
+          if(err) {
+            return console.log(err)
+          }
+        })
       }
     },
     function(err) {
@@ -80,7 +103,20 @@ function getNowPlaying() {
   )
 };
 
+function writeToFile() {
+  fs.writeFile('nowPlaying.json', JSON.stringify(nowPlaying), function(err) {
+    if(err) {
+      return console.log(err)
+    }
+  })
+};
+
+function interval() {
+  getNowPlaying();
+  writeToFile();
+}
+
 generateURL()
 getTokens()
 setInterval(refreshTokens, 1000 * 60 * 60)
-setInterval(getNowPlaying, 1000 * 5)
+setInterval(interval, 1000 * 4)

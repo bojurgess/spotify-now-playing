@@ -1,12 +1,3 @@
-const { clientId, clientSecret, redirectUri } = require('./credentials.json');
-const SpotifyWebApi = require('spotify-web-api-node');
-
-const spotifyApi = new SpotifyWebApi({
-  clientId: clientId,
-  clientSecret: clientSecret,
-  redirectUri: redirectUri
-});
-
 exports.nowPlaying = {};
 
 function getNowPlaying() {

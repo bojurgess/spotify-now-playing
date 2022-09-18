@@ -1,0 +1,8 @@
+# Contains clientId clientSecret and redirectUri
+credentials.json
+
+#Contains the access token
+code.json
+
+#My vscode workspace
+app.code-workspace

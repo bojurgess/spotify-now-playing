@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "open": "^8.4.0",
+    "spotify-web-api-node": "^5.0.2"
+  }
+}

@@ -14,7 +14,7 @@ const app = express()
 app.use(cors())
 // Initialise empty 'state' object for later use
 const state = {}
-const spotify = {}
+export const spotify = {}
 
 // Defining dirname
 const __filename = fileURLToPath(import.meta.url);
@@ -113,7 +113,7 @@ app.get('/callback', (req, res) => {
 });
 
 // Request a new access token using our refresh token.
-app.get('/refresh_token', (req, res) => {
+function refresh_token() {
     const refresh_token = spotify.refresh_token;
     // Defining authOptions to be passed to our post request. Same as before except we discard the need for a code value and use the grant type 'refresh_token' instead.
     // We also discard the 'content_type' header in our new request.
@@ -136,12 +136,12 @@ app.get('/refresh_token', (req, res) => {
             });
         }
     });
-});
+};
 
-//Get the now playing song
+// Get the now playing song
 function getNowPlaying() {
     
-    //Options for our GET request
+    // Options for our GET request
     const requestOptions = {
         url: 'http://api.spotify.com/v1/me/player/currently-playing',
         headers: {
@@ -151,7 +151,7 @@ function getNowPlaying() {
     };
 
     request.get(requestOptions, (error, response, body) => {
-        //Creating an object out of raw json data recieved from http response
+        // Creating an object out of raw json data recieved from http response
         const rawData = JSON.parse(body)
         const data = {
             songName: rawData.item.name,
@@ -164,7 +164,7 @@ function getNowPlaying() {
             duration_ms: rawData.item.duration_ms
         }
 
-        //Turns ms values for duration and playback into a more readable format (mm:ss)
+        // Turns ms values for duration and playback into a more readable format (mm:ss)
         function playback() {
             let progress_seconds = Math.floor(data.progress_ms / 1000)
             let progress_minutes = Math.floor(data.progress_ms / 60000)
@@ -186,7 +186,10 @@ function getNowPlaying() {
         console.log(playback() + ` | ${data.songName} by ${data.artist}`)
         })
 }
-//Tells express app to listen on port defined in .env then logs the address to the console.
+
+// Set the refresh_token function to run every hour, when our access token expires.
+setInterval(refresh_token, 1000 * 3600)
+
+// Tells express app to listen on port defined in .env then logs the address to the console.
 app.listen(process.env.PORT)
 console.log(`Webserver Started on http://localhost:${process.env.PORT}`)
-console.log(`Visit http://localhost:${process.env.PORT}/login to begin the login process`)

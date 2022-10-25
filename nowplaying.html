@@ -4,9 +4,23 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Now Playing!</title>
+    <title>beno</title>
 </head>
 <body>
-    <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/4d6iVPhEpZI48CLkNbWbkq?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+    <iframe id="embed" style="border-radius:12px" width="100%" height="152" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+    <script type="text/json" src="response.json"></script>
+    <script type="text/javascript">
+        function nowPlaying() {
+            const request = new XMLHttpRequest();
+            request.open("GET", "/response.json", false);
+            request.send(null)
+            const json = JSON.parse(request.responseText);
+            const obj = json
+
+            const nowPlaying = (obj.item.uri.slice(14))
+            document.getElementById('embed').src = `https://open.spotify.com/embed/track/${nowPlaying}?utm_source=generator`
+        }
+        setInterval(nowPlaying, 1000 * 5)
+    </script>
 </body>
 </html>

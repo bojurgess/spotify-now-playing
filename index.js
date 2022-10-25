@@ -6,6 +6,7 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import request from 'request';
 import cors from 'cors';
+import * as fs from 'fs'
 
 // Initialise dotenv & express
 dotenv.config()
@@ -25,6 +26,18 @@ app.get('/', (req, res) => {
 
 app.get('/NowPlaying', (req, res) => {
     res.sendFile('/nowplaying.html', {root: __dirname})
+})
+
+app.get('/style.css', (req, res) => {
+    res.sendFile('/style.css', {root: __dirname})
+})
+
+app.get('/require.js', (req, res) => {
+    res.sendFile('/require.js', {root: __dirname})
+})
+
+app.get('/response.json', (req, res) => {
+    res.sendFile('/response.json', {root: __dirname})
 })
 
 // Login route, passes basic information to Spotify Accounts Service.
@@ -98,7 +111,7 @@ app.get('/callback', (req, res) => {
 
                 //Make get request to access the Spotify Web API, using previously acquired access token.
                 request.get(options, (error, response, body) => {
-                    setInterval(getNowPlaying, 1000 * 5)
+                    setInterval(getNowPlaying, 1000)
                 });
             // If an unexpected response code is returned in the post request, redirect to /# and pass querystring 'invalid_token'.
             } else {
@@ -129,7 +142,7 @@ app.get('/refresh_token', (req, res) => {
     // Make our post request to the accounts service, providing our authOptions to generate a new access token.
     request.post(authOptions, (error, response, body) => {
         if (!error && response.statusCode === 200) {
-            const access_token = body.access_token;
+            spotify.access_token = body.access_token;
             res.send({
                 'access_token': access_token
             });
@@ -148,13 +161,31 @@ function getNowPlaying() {
     };
 
     request.get(requestOptions, (error, response, body) => {
-        const json = body
-        const obj = JSON.parse(json)
+        const rawData = JSON.parse(body)
+        const data = {
+            songName: rawData.item.name,
+            songUri: rawData.item.uri,
+            songId: rawData.item.id,
+            artist: rawData.item.artists[0].name,
+            artistUri: rawData.item.artists[0].uri,
+            albumArt: rawData.item.album.images[1].url,
+            progress_ms: rawData.progress_ms,
+            duration_ms: rawData.item.duration_ms
+        }
+        let progress_seconds = Math.floor(data.progress_ms / 1000)
+        let progress_minutes = Math.floor(data.progress_ms / 60000)
 
-        const nowPlaying = (obj.item.uri.slice(14))
-        console.log(nowPlaying);
-    })
+        let duration_seconds = Math.floor(data.duration_ms / 1000)
+        let duration_minutes = Math.floor(data.duration_ms / 60000)
 
+            progress_seconds = progress_seconds % 60;
+            progress_minutes = progress_minutes % 60;
+
+            duration_seconds = duration_seconds % 60;
+            duration_minutes = duration_minutes % 60;
+
+        console.log(`${progress_minutes}:${progress_seconds} / ${duration_minutes}:${duration_seconds}`)
+        })
 }
 //Tells express app to listen on port defined in .env then logs the address to the console.
 app.listen(process.env.PORT)

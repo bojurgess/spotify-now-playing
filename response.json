@@ -1,0 +1,88 @@
+{
+  "timestamp" : 1666735788408,
+  "context" : {
+    "external_urls" : {
+      "spotify" : "https://open.spotify.com/playlist/37i9dQZF1EQqedj0y9Uwvu"
+    },
+    "href" : "https://api.spotify.com/v1/playlists/37i9dQZF1EQqedj0y9Uwvu",
+    "type" : "playlist",
+    "uri" : "spotify:playlist:37i9dQZF1EQqedj0y9Uwvu"
+  },
+  "progress_ms" : 184129,
+  "item" : {
+    "album" : {
+      "album_type" : "album",
+      "artists" : [ {
+        "external_urls" : {
+          "spotify" : "https://open.spotify.com/artist/6Vh6UDWfu9PUSXSzAaB3CW"
+        },
+        "href" : "https://api.spotify.com/v1/artists/6Vh6UDWfu9PUSXSzAaB3CW",
+        "id" : "6Vh6UDWfu9PUSXSzAaB3CW",
+        "name" : "Example",
+        "type" : "artist",
+        "uri" : "spotify:artist:6Vh6UDWfu9PUSXSzAaB3CW"
+      } ],
+      "available_markets" : [ "AD", "AE", "AG", "AL", "AM", "AR", "AZ", "BA", "BB", "BD", "BG", "BH", "BN", "BO", "BR", "BS", "BT", "BY", "BZ", "CA", "CL", "CO", "CR", "CW", "CY", "CZ", "DK", "DM", "DO", "DZ", "EC", "EE", "EG", "ES", "FI", "FM", "FR", "GB", "GD", "GE", "GR", "GT", "GY", "HK", "HN", "HR", "HT", "HU", "ID", "IE", "IL", "IN", "IQ", "IS", "IT", "JM", "JO", "JP", "KG", "KH", "KN", "KR", "KW", "KZ", "LA", "LB", "LC", "LK", "LT", "LV", "LY", "MA", "MC", "MD", "ME", "MK", "MN", "MO", "MT", "MV", "MX", "MY", "NI", "NO", "NP", "OM", "PA", "PE", "PH", "PK", "PL", "PS", "PT", "PY", "QA", "RO", "RS", "SA", "SE", "SG", "SI", "SK", "SM", "SR", "SV", "TH", "TJ", "TL", "TN", "TR", "TT", "TW", "UA", "US", "UY", "UZ", "VC", "VE", "VN", "XK" ],
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/album/4nXsSZ1XwW82cbGVqPwT3X"
+      },
+      "href" : "https://api.spotify.com/v1/albums/4nXsSZ1XwW82cbGVqPwT3X",
+      "id" : "4nXsSZ1XwW82cbGVqPwT3X",
+      "images" : [ {
+        "height" : 640,
+        "url" : "https://i.scdn.co/image/ab67616d0000b273bfe9238c97b12f9dae957786",
+        "width" : 640
+      }, {
+        "height" : 300,
+        "url" : "https://i.scdn.co/image/ab67616d00001e02bfe9238c97b12f9dae957786",
+        "width" : 300
+      }, {
+        "height" : 64,
+        "url" : "https://i.scdn.co/image/ab67616d00004851bfe9238c97b12f9dae957786",
+        "width" : 64
+      } ],
+      "name" : "#hits",
+      "release_date" : "2013-08-02",
+      "release_date_precision" : "day",
+      "total_tracks" : 16,
+      "type" : "album",
+      "uri" : "spotify:album:4nXsSZ1XwW82cbGVqPwT3X"
+    },
+    "artists" : [ {
+      "external_urls" : {
+        "spotify" : "https://open.spotify.com/artist/6Vh6UDWfu9PUSXSzAaB3CW"
+      },
+      "href" : "https://api.spotify.com/v1/artists/6Vh6UDWfu9PUSXSzAaB3CW",
+      "id" : "6Vh6UDWfu9PUSXSzAaB3CW",
+      "name" : "Example",
+      "type" : "artist",
+      "uri" : "spotify:artist:6Vh6UDWfu9PUSXSzAaB3CW"
+    } ],
+    "available_markets" : [ "AD", "AE", "AG", "AL", "AM", "AR", "AZ", "BA", "BB", "BD", "BG", "BH", "BN", "BO", "BR", "BS", "BT", "BY", "BZ", "CA", "CL", "CO", "CR", "CW", "CY", "CZ", "DK", "DM", "DO", "DZ", "EC", "EE", "EG", "ES", "FI", "FM", "FR", "GB", "GD", "GE", "GR", "GT", "GY", "HK", "HN", "HR", "HT", "HU", "ID", "IE", "IL", "IN", "IQ", "IS", "IT", "JM", "JO", "JP", "KG", "KH", "KN", "KR", "KW", "KZ", "LA", "LB", "LC", "LK", "LT", "LV", "LY", "MA", "MC", "MD", "ME", "MK", "MN", "MO", "MT", "MV", "MX", "MY", "NI", "NO", "NP", "OM", "PA", "PE", "PH", "PK", "PL", "PS", "PT", "PY", "QA", "RO", "RS", "SA", "SE", "SG", "SI", "SK", "SM", "SR", "SV", "TH", "TJ", "TL", "TN", "TR", "TT", "TW", "UA", "US", "UY", "UZ", "VC", "VE", "VN", "XK" ],
+    "disc_number" : 1,
+    "duration_ms" : 219692,
+    "explicit" : false,
+    "external_ids" : {
+      "isrc" : "GBCEN0901525"
+    },
+    "external_urls" : {
+      "spotify" : "https://open.spotify.com/track/26g9NU7OeoDeG4ZEv7vvAK"
+    },
+    "href" : "https://api.spotify.com/v1/tracks/26g9NU7OeoDeG4ZEv7vvAK",
+    "id" : "26g9NU7OeoDeG4ZEv7vvAK",
+    "is_local" : false,
+    "name" : "Won't Go Quietly - Radio Edit",
+    "popularity" : 46,
+    "preview_url" : "https://p.scdn.co/mp3-preview/34a281a8885348fe94d30c19ac85198443889c44?cid=b2397c8cf94b4e1ca751a058bce23966",
+    "track_number" : 5,
+    "type" : "track",
+    "uri" : "spotify:track:26g9NU7OeoDeG4ZEv7vvAK"
+  },
+  "currently_playing_type" : "track",
+  "actions" : {
+    "disallows" : {
+      "resuming" : true
+    }
+  },
+  "is_playing" : true
+}

@@ -55,6 +55,7 @@ app.get('/callback', (req, res) => {
         res.sendFile('/success.html', {root: __dirname});
         console.log('Matching states found! Proceeding with auth process.')
 
+        //Defining what is sent to the accounts service in the post request
         const authOptions = {
             url: 'https://accounts.spotify.com/api/token',
             form: {
@@ -69,20 +70,25 @@ app.get('/callback', (req, res) => {
             json: true
         };
 
+        //Making post request to Spotify Accounts Service
         request.post(authOptions, (error, response, body) => {
+            //If the expected 200 response code is returned, define the access & refresh tokens.
             if (!error && response.statusCode === 200) {
                 const access_token = body.access_token,
                       refresh_token = body.refresh_token;
                 
+                //Defining options to be sent in another get request.
                 const options = {
                     url: 'https://api.spotify.com/v1/me',
                     headers: { 'Authorization': 'Bearer ' + access_token },
                     json: true
                 };
 
+                //Make get request to access the Spotify Web API, using previously acquired access token.
                 request.get(options, (error, response, body) => {
                     console.log(body)
                 });
+            //If an unexpected response code is returned in the post request, redirect to /# and pass querystring 'invalid_token'.
             } else {
                 res.redirect('/#' + 
                     QueryString.stringify({

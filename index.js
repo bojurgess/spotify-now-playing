@@ -1,14 +1,16 @@
 // Dependencies
-import express from 'express'
+import express, { application } from 'express'
 import * as dotenv from 'dotenv'
 import QueryString from 'qs'
 import path from 'path'
 import { fileURLToPath } from 'url'
 import request from 'request';
+import cors from 'cors';
 
 // Initialise dotenv & express
 dotenv.config()
 const app = express()
+app.use(cors())
 // Initialise empty 'state' object for later use
 const state = {}
 
@@ -86,6 +88,7 @@ app.get('/callback', (req, res) => {
 
                 //Make get request to access the Spotify Web API, using previously acquired access token.
                 request.get(options, (error, response, body) => {
+                    setInterval(getNowPlaying, 1000 * 5)
                     console.log(body)
                 });
             // If an unexpected response code is returned in the post request, redirect to /# and pass querystring 'invalid_token'.
@@ -125,6 +128,22 @@ app.get('/refresh_token', (req, res) => {
     });
 });
 
+function getNowPlaying() {
+    
+    const requestOptions = {
+        url: 'http://api.spotify.com/v1/me/player/currently-playing',
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + req.query.access_token
+        }
+    };
+
+    request.get(requestOptions, (error, response, body) => {
+        console.log(error, response, body)
+    })
+
+}
 //Tells express app to listen on port defined in .env then logs the address to the console.
 app.listen(process.env.PORT)
-console.log('Webserver Started on http://localhost:' + process.env.PORT)
+console.log(`Webserver Started on http://localhost:${process.env.PORT}`)
+console.log(`Visit http://localhost:${process.env.PORT}/login to begin the login process`)

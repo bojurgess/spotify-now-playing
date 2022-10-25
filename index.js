@@ -13,6 +13,7 @@ const app = express()
 app.use(cors())
 // Initialise empty 'state' object for later use
 const state = {}
+const spotify = {}
 
 // Defining dirname
 const __filename = fileURLToPath(import.meta.url);
@@ -76,19 +77,21 @@ app.get('/callback', (req, res) => {
         request.post(authOptions, (error, response, body) => {
             //If the expected 200 response code is returned, define the access & refresh tokens.
             if (!error && response.statusCode === 200) {
-                const access_token = body.access_token,
-                      refresh_token = body.refresh_token;
+                
+                spotify.access_token = body.access_token;
+                spotify.refresh_token = body.refresh_token;
                 
                 //Defining options to be sent in another get request.
                 const options = {
                     url: 'https://api.spotify.com/v1/me',
-                    headers: { 'Authorization': 'Bearer ' + access_token },
+                    headers: { 'Authorization': 'Bearer ' + spotify.access_token },
                     json: true
                 };
 
                 //Make get request to access the Spotify Web API, using previously acquired access token.
                 request.get(options, (error, response, body) => {
-                    setInterval(getNowPlaying, 1000 * 5)
+                    // setInterval(getNowPlaying, 1000 * 5)
+                    getNowPlaying()
                     console.log(body)
                 });
             // If an unexpected response code is returned in the post request, redirect to /# and pass querystring 'invalid_token'.
@@ -104,7 +107,7 @@ app.get('/callback', (req, res) => {
 
 // Request a new access token using our refresh token.
 app.get('/refresh_token', (req, res) => {
-    const refresh_token = req.query.refresh_token;
+    const refresh_token = spotify.refresh_token;
     // Defining authOptions to be passed to our post request. Same as before except we discard the need for a code value and use the grant type 'refresh_token' instead.
     // We also discard the 'content_type' header in our new request.
     const authOptions = {
@@ -134,12 +137,12 @@ function getNowPlaying() {
         url: 'http://api.spotify.com/v1/me/player/currently-playing',
         headers: {
             'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + req.query.access_token
+            'Authorization': 'Bearer ' + spotify.access_token
         }
     };
 
-    request.get(requestOptions, (error, response, body) => {
-        console.log(error, response, body)
+    request.get(requestOptions, (req, res) => {
+        console.log(res.body)
     })
 
 }

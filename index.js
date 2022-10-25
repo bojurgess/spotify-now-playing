@@ -23,6 +23,10 @@ app.get('/', (req, res) => {
     res.sendFile('/index.html', {root: __dirname})
 })
 
+app.get('/NowPlaying', (req, res) => {
+    res.sendFile('/nowplaying.html', {root: __dirname})
+})
+
 // Login route, passes basic information to Spotify Accounts Service.
 app.get('/login', (req, res) => {
 
@@ -81,7 +85,7 @@ app.get('/callback', (req, res) => {
         request.post(authOptions, (error, response, body) => {
             //If the expected 200 response code is returned, define the access & refresh tokens.
             if (!error && response.statusCode === 200) {
-                
+
                 spotify.access_token = body.access_token;
                 spotify.refresh_token = body.refresh_token;
                 
@@ -147,8 +151,8 @@ function getNowPlaying() {
         const json = body
         const obj = JSON.parse(json)
 
-        const nowPlaying = obj.item.uri
-        console.log(nowPlaying)
+        const nowPlaying = (obj.item.uri.slice(14))
+        console.log(nowPlaying);
     })
 
 }

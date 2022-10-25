@@ -6,12 +6,13 @@ import path from 'path'
 import { fileURLToPath } from 'url'
 import request from 'request';
 import cors from 'cors';
-import * as fs from 'fs'
 
 // Initialise dotenv & express
 dotenv.config()
 const app = express()
 app.use(cors())
+
+express.static.mime.define({'application/javascript': ['js']});
 // Initialise empty 'state' object for later use
 const state = {}
 export const spotify = {}
@@ -19,14 +20,6 @@ export const spotify = {}
 // Defining dirname
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-
-app.get('/', (req, res) => {
-    res.sendFile('./routes/index.html', {root: __dirname})
-})
-
-app.get('/NowPlaying', (req, res) => {
-    res.sendFile('./routes/nowplaying.html', {root: __dirname})
-})
 
 // Login route, passes basic information to Spotify Accounts Service.
 app.get('/login', (req, res) => {
@@ -64,7 +57,7 @@ app.get('/callback', (req, res) => {
     }
     // If callback state matches the initial state, send a success.html file and proceed with auth process.
     else if (state.callback === state.initial) {
-        res.redirect('/NowPlaying', {root: __dirname});
+        res.redirect('/NowPlaying');
         console.log('Matching states found! Proceeding with auth process.')
 
         // Defining what is sent to the accounts service in the post request
@@ -99,7 +92,6 @@ app.get('/callback', (req, res) => {
 
                 //Make get request to access the Spotify Web API, using previously acquired access token.
                 request.get(options, (error, response, body) => {
-                    setInterval(getNowPlaying, 1000)
                 });
             // If an unexpected response code is returned in the post request, redirect to /# and pass querystring 'invalid_token'.
             } else {
@@ -139,7 +131,7 @@ function refresh_token() {
 };
 
 // Get the now playing song
-function getNowPlaying() {
+export function getNowPlaying() {
     
     // Options for our GET request
     const requestOptions = {

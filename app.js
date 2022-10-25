@@ -21,23 +21,11 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 app.get('/', (req, res) => {
-    res.sendFile('/index.html', {root: __dirname})
+    res.sendFile('./routes/index.html', {root: __dirname})
 })
 
 app.get('/NowPlaying', (req, res) => {
-    res.sendFile('/nowplaying.html', {root: __dirname})
-})
-
-app.get('/style.css', (req, res) => {
-    res.sendFile('/style.css', {root: __dirname})
-})
-
-app.get('/require.js', (req, res) => {
-    res.sendFile('/require.js', {root: __dirname})
-})
-
-app.get('/response.json', (req, res) => {
-    res.sendFile('/response.json', {root: __dirname})
+    res.sendFile('./routes/nowplaying.html', {root: __dirname})
 })
 
 // Login route, passes basic information to Spotify Accounts Service.
@@ -76,7 +64,7 @@ app.get('/callback', (req, res) => {
     }
     // If callback state matches the initial state, send a success.html file and proceed with auth process.
     else if (state.callback === state.initial) {
-        res.sendFile('/success.html', {root: __dirname});
+        res.redirect('/NowPlaying', {root: __dirname});
         console.log('Matching states found! Proceeding with auth process.')
 
         // Defining what is sent to the accounts service in the post request

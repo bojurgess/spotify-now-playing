@@ -144,7 +144,7 @@ app.get('/refresh_token', (req, res) => {
         if (!error && response.statusCode === 200) {
             spotify.access_token = body.access_token;
             res.send({
-                'access_token': access_token
+                'access_token': spotify.access_token
             });
         }
     });
@@ -172,19 +172,26 @@ function getNowPlaying() {
             progress_ms: rawData.progress_ms,
             duration_ms: rawData.item.duration_ms
         }
-        let progress_seconds = Math.floor(data.progress_ms / 1000)
-        let progress_minutes = Math.floor(data.progress_ms / 60000)
 
-        let duration_seconds = Math.floor(data.duration_ms / 1000)
-        let duration_minutes = Math.floor(data.duration_ms / 60000)
+        function playback() {
+            let progress_seconds = Math.floor(data.progress_ms / 1000)
+            let progress_minutes = Math.floor(data.progress_ms / 60000)
+    
+            let duration_seconds = Math.floor(data.duration_ms / 1000)
+            let duration_minutes = Math.floor(data.duration_ms / 60000)
+    
+                progress_seconds = progress_seconds % 60;
+                progress_minutes = progress_minutes % 60;
+    
+                duration_seconds = duration_seconds % 60;
+                duration_minutes = duration_minutes % 60;
+                
+                progress_seconds = progress_seconds.toString().padStart(2, '0')
+                duration_seconds = duration_seconds.toString().padStart(2, '0')
 
-            progress_seconds = progress_seconds % 60;
-            progress_minutes = progress_minutes % 60;
-
-            duration_seconds = duration_seconds % 60;
-            duration_minutes = duration_minutes % 60;
-
-        console.log(`${progress_minutes}:${progress_seconds} / ${duration_minutes}:${duration_seconds}`)
+            console.log(`${progress_minutes}:${progress_seconds} / ${duration_minutes}:${duration_seconds}`)
+        }
+        playback()
         })
 }
 //Tells express app to listen on port defined in .env then logs the address to the console.

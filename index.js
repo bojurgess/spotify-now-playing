@@ -19,6 +19,10 @@ const spotify = {}
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+app.get('/', (req, res) => {
+    res.sendFile('/index.html', {root: __dirname})
+})
+
 // Login route, passes basic information to Spotify Accounts Service.
 app.get('/login', (req, res) => {
 
@@ -90,9 +94,7 @@ app.get('/callback', (req, res) => {
 
                 //Make get request to access the Spotify Web API, using previously acquired access token.
                 request.get(options, (error, response, body) => {
-                    // setInterval(getNowPlaying, 1000 * 5)
-                    getNowPlaying()
-                    console.log(body)
+                    setInterval(getNowPlaying, 1000 * 5)
                 });
             // If an unexpected response code is returned in the post request, redirect to /# and pass querystring 'invalid_token'.
             } else {
@@ -141,8 +143,12 @@ function getNowPlaying() {
         }
     };
 
-    request.get(requestOptions, (req, res) => {
-        console.log(res.body)
+    request.get(requestOptions, (error, response, body) => {
+        const json = body
+        const obj = JSON.parse(json)
+
+        const nowPlaying = obj.item.uri
+        console.log(nowPlaying)
     })
 
 }

@@ -150,8 +150,10 @@ app.get('/refresh_token', (req, res) => {
     });
 });
 
+//Get the now playing song
 function getNowPlaying() {
     
+    //Options for our GET request
     const requestOptions = {
         url: 'http://api.spotify.com/v1/me/player/currently-playing',
         headers: {
@@ -161,6 +163,7 @@ function getNowPlaying() {
     };
 
     request.get(requestOptions, (error, response, body) => {
+        //Creating an object out of raw json data recieved from http response
         const rawData = JSON.parse(body)
         const data = {
             songName: rawData.item.name,
@@ -173,6 +176,7 @@ function getNowPlaying() {
             duration_ms: rawData.item.duration_ms
         }
 
+        //Turns ms values for duration and playback into a more readable format (mm:ss)
         function playback() {
             let progress_seconds = Math.floor(data.progress_ms / 1000)
             let progress_minutes = Math.floor(data.progress_ms / 60000)
@@ -189,9 +193,9 @@ function getNowPlaying() {
                 progress_seconds = progress_seconds.toString().padStart(2, '0')
                 duration_seconds = duration_seconds.toString().padStart(2, '0')
 
-            console.log(`${progress_minutes}:${progress_seconds} / ${duration_minutes}:${duration_seconds}`)
+            return(`${progress_minutes}:${progress_seconds} / ${duration_minutes}:${duration_seconds}`)
         }
-        playback()
+        console.log(playback() + ` | ${data.songName} by ${data.artist}`)
         })
 }
 //Tells express app to listen on port defined in .env then logs the address to the console.

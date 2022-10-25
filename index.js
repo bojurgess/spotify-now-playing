@@ -22,16 +22,22 @@ app.get('/login', (req, res) => {
             client_id: process.env.CLIENT_ID,
             scope: scope,
             redirect_uri: process.env.REDIRECT_URI,
-            state: state,
+            state: state.initial,
             show_dialog: true
     }));
 })
 
 app.get('/callback', (req, res) => {
     
-    state.callback = req.query.state || null
+    state.callback = Number(req.query.state) || null
 
-    if (state.callback === state.initial) {
+    if (state.callback === null) {
+        res.redirect('/#' + 
+        QueryString.stringify({
+            error: 'state_mismatch'
+        }));
+    }
+    else if (state.callback === state.initial) {
         res.sendFile('/success.html', {root: __dirname});
     }
     else if (state.callback !== state.initial) {
@@ -41,5 +47,3 @@ app.get('/callback', (req, res) => {
 
 app.listen(process.env.PORT)
 console.log('Webserver Started on http://localhost:8888')
-
-console.log(state.initial, state.callback)

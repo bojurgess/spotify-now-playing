@@ -8,6 +8,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@pika/web": "^0.6.1",
     "superagent": "^8.0.2"
   },
   "devDependencies": {

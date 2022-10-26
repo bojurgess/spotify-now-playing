@@ -3,10 +3,9 @@ import express, { application } from 'express'
 import * as dotenv from 'dotenv'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import request from 'request';
 import cors from 'cors';
 
-import router from './routes.js';
+import router from './router.js';
 
 // Initialise dotenv & express
 dotenv.config()
@@ -24,6 +23,7 @@ const __dirname = path.dirname(__filename);
 
 // Import our router from routes.js
 app.use(router)
+app.use(express.static('public'))
 
 // Request a new access token using our refresh token.
 function refresh_token() {

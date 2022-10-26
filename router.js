@@ -26,6 +26,11 @@ router.get('/NowPlaying', (req, res) => {
     res.sendFile('./routes/nowplaying.html', {root: __dirname})
 })
 
+// Route for app.js
+router.get('/app.js', (req, res) => {
+    res.sendFile('./app.js', {root: __dirname})
+})
+
 // Login route, passes basic information to Spotify Accounts Service.
 router.get('/login', (req, res) => {
 

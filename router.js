@@ -1,7 +1,7 @@
 // Dependencies
-import path from 'path';
+import path, { parse } from 'path';
 import { fileURLToPath } from 'url';
-import { state, spotify } from './app.js';
+import { state, spotify, parseNowPlaying, playback, player } from './app.js';
 import request from 'request';
 import QueryString from 'qs';
 
@@ -101,6 +101,10 @@ router.get('/callback', (req, res) => {
 
                 //Make get request to access the Spotify Web API, using previously acquired access token.
                 request.get(options, (error, response, body) => {
+                    setInterval(() => {
+                        parseNowPlaying();
+                        playback()
+                    }, 1000)
                 });
             // If an unexpected response code is returned in the post request, redirect to /# and pass querystring 'invalid_token'.
             } else {

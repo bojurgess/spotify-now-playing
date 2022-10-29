@@ -1,8 +1,9 @@
 // Dependencies
-import express, { application } from 'express'
-import * as dotenv from 'dotenv'
-import path from 'path'
-import { fileURLToPath } from 'url'
+import express, { application } from 'express';
+import * as dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import request from 'request';
 import cors from 'cors';
 
 import router from './router.js';
@@ -13,9 +14,11 @@ const app = express()
 app.use(cors())
 
 express.static.mime.define({'application/javascript': ['js']});
-// Initialise empty 'state' object for later use
+// Initialise empty objects for later use
 export const state = {}
 export const spotify = {}
+export const player = {}
+export let data = {}
 
 // Defining dirname
 const __filename = fileURLToPath(import.meta.url);
@@ -52,7 +55,7 @@ function refresh_token() {
 };
 
 // Get the now playing song
-export function getNowPlaying() {
+export function parseNowPlaying() {
     
     // Options for our GET request
     const requestOptions = {
@@ -64,42 +67,44 @@ export function getNowPlaying() {
     };
 
     request.get(requestOptions, (error, response, body) => {
+        // console.log(body)
         // Creating an object out of raw json data recieved from http response
-        const rawData = JSON.parse(body)
-        const data = {
-            songName: rawData.item.name,
-            songUri: rawData.item.uri,
-            songId: rawData.item.id,
-            artist: rawData.item.artists[0].name,
-            artistUri: rawData.item.artists[0].uri,
-            albumArt: rawData.item.album.images[1].url,
-            progress_ms: rawData.progress_ms,
-            duration_ms: rawData.item.duration_ms
-        }
+            const rawData = JSON.parse(body)
+            data = {
+                songName: rawData.item.name,
+                songUri: rawData.item.uri,
+                songId: rawData.item.id,
+                artist: rawData.item.artists[0].name,
+                artistUri: rawData.item.artists[0].uri,
+                albumArt: rawData.item.album.images[1].url,
+                progress_ms: rawData.progress_ms,
+                duration_ms: rawData.item.duration_ms
+            }
 
-        // Turns ms values for duration and playback into a more readable format (mm:ss)
-        function playback() {
-            let progress_seconds = Math.floor(data.progress_ms / 1000)
-            let progress_minutes = Math.floor(data.progress_ms / 60000)
+    });
+}
+        
+// Turns ms values for duration and playback into a more readable format (mm:ss)
+export function playback() {
+    player.progress.seconds = Math.floor(data.progress_ms / 1000)
+    player.progress.minutes = Math.floor(data.progress_ms / 60000)
+
+    player.duration.seconds = Math.floor(data.duration_ms / 1000)
+    player.duration.minutes = Math.floor(data.duration_ms / 60000)
+
+    player.progress.seconds = player.progress.seconds % 60;
+    player.progress.minutes = player.progress.minutes % 60;
     
-            let duration_seconds = Math.floor(data.duration_ms / 1000)
-            let duration_minutes = Math.floor(data.duration_ms / 60000)
-    
-                progress_seconds = progress_seconds % 60;
-                progress_minutes = progress_minutes % 60;
-    
-                duration_seconds = duration_seconds % 60;
-                duration_minutes = duration_minutes % 60;
+    player.duration.seconds = player.duration.seconds % 60;
+    player.duration.minutes = player.duration.minutes % 60;
                 
-                progress_seconds = progress_seconds.toString().padStart(2, '0')
-                duration_seconds = duration_seconds.toString().padStart(2, '0')
+    player.progress.seconds = player.progress.seconds.toString().padStart(2, '0')
+    player.duration.seconds = player.duration.seconds.toString().padStart(2, '0')
 
-            return(`${progress_minutes}:${progress_seconds} / ${duration_minutes}:${duration_seconds}`)
-        }
-        console.log(playback() + ` | ${data.songName} by ${data.artist}`)
-        })
+    return(`${progress_minutes}:${progress_seconds} / ${duration_minutes}:${duration_seconds}`)
 }
 
+console.log(playback() + ` | ${data.songName} by ${data.artist}`)
 // Set the refresh_token function to run every hour, when our access token expires.
 setInterval(refresh_token, 1000 * 3600)
 
